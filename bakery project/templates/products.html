@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Talkine&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{{ url_for('home') }}" class="logo">🍞BREAD</a>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('products') }}">Products</a>
+            <a href="{{ url_for('contact') }}">Contacts</a>
+        </div>  
+    </div>
+</nav>
+
+<section class="products">
+    <h1 class="section-title">Our Menu</h1>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+            <h3 class="product-name">{{ product.name }}</h3>
+
+            <div class="price-cart-container">
+                <span class="price">₱{{ product.price }}</span>
+                
+                <a href="{{ url_for('order') }}?product_id={{ product.id }}&quantity=1" class="cta-button" style="background-color:#f59e0b; color:white; padding:5px 10px; border-radius:4px; text-decoration:none;">Order Now</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+</body>
+</html>

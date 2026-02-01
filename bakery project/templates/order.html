@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Place Order</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="logo">🍞BREAD</a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('contact') }}">Contacts</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="content order-page">
+
+        {% if success %}
+        <div class="order-card">
+            <h2>🎉 Order Placed Successfully!</h2>
+            <p>Thank you, <strong>{{ customer }}</strong>!</p>
+            <p><strong>Order ID:</strong> {{ order_id }}</p>
+
+            <h3>Order Details</h3>
+            <ul>
+                {% for item in items %}
+                <li>
+                    {{ item.name }} —
+                    Qty: {{ item.quantity }} —
+                    ₱{{ "%.2f"|format(item.price) }}
+                </li>
+                {% endfor %}
+            </ul>
+
+            <a href="{{ url_for('home') }}"
+               class="submit-button"
+               style="display:inline-block;text-decoration:none;">
+                Back to Home
+            </a>
+        </div>
+
+        {% else %}
+
+        <h2 style="margin-bottom:20px;">Place Your Order</h2>
+
+        <form action="{{ url_for('order') }}" method="POST" class="order-form">
+
+            <div class="order-grid">
+
+         
+                <div class="order-card">
+                    <h3>Customer Information</h3>
+
+                    <label>Name</label>
+                    <input type="text" name="customer_name" required>
+
+                    <label>Phone</label>
+                    <input type="text" name="phone" placeholder="09XXXXXXXXX" required>
+
+                    <label>Address</label>
+                    <textarea name="address" required></textarea>
+                </div> 
+                <div class="order-card">
+                    <h3>Select Products</h3>
+
+                    {% for product in products %}
+                    <div class="order-product">
+                        <div class="product-info">
+                            <strong>{{ product.name }}</strong><br>
+                            <span>₱{{ "%.2f"|format(product.price) }}</span>
+                        </div>
+                        <input
+                            type="number"
+                            name="quantity"
+                            value="{% if request.args.get('product_id')|string == product.id|string %}{{ request.args.get('quantity', '1') }}{% else %}1{% endif %}"
+                            min="1"
+                            class="product-qty"
+                        >
+
+                        <input
+                            type="checkbox"
+                            name="product_id"
+                            value="{{ product.id }}"
+                            {% if request.args.get('product_id')|string == product.id|string %}checked{% endif %}
+                            class="product-check"
+                        >
+                    </div>
+                    {% endfor %}
+
+                    <button type="submit" class="submit-button full">
+                        Place Order
+                    </button>
+                </div>
+
+            </div>
+        </form>
+        {% endif %}
+
+    </section>
+
+  <script>
+    document.querySelectorAll('.order-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const productCard = button.closest('.product-card');
+            const checkbox = productCard.querySelector('.product-check');
+            const qtyInput = productCard.querySelector('.product-qty');
+            checkbox.checked = true;
+
+            if (qtyInput.value == 0) {
+                qtyInput.value = 1;
+            }
+
+            productCard.classList.add('selected');
+        });
+    });
+    </script>
+
+</body>
+</html>
+

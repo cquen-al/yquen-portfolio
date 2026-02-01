@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('home') }}" class="logo">🍞BREAD</a>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('products') }}">Products</a>
+        <a href="{{ url_for('contact') }}">Contacts</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="homepage">
+    <div class="home-text">
+      <h1>"Taste the tradition, feel the comfort━ only at La Ultina"</h1>
+      <h2 style="font-style: italic;">BIENVENIDO</h2>
+      <a href="{{ url_for('products') }}" class="cta-button" style="display:inline-block; margin-top:20px; background-color:#f59e0b; color:rgb(255, 255, 255); padding:10px 20px; border-radius:6px; text-decoration:none;">Explore Menu</a>
+    </div>
+  </section>
+
+  <section class="content">
+    <h2 style="text-align:center;">About La Ultina Bakeshop</h2>
+    <p style="max-width:800px; margin: 0 auto; text-align:center;">
+      <img src="{{ url_for('static', filename='background.jpg') }}" alt="La Ultima Bakeshop Establishment" style="display:block; margin:20px auto; max-width: 600px; width: 50%; border-radius: 12px;">
+      Welcome to <strong>La Ultina Bakeshop</strong>! <br><br>
+      La Ultina Bakery was located at the back of ANECO Butuan City. It was founded by Ms. Daisy Gura. She bakes batches of pan de sal and ensaymada in a traditional wood-fired oven.
+      Word of her delectable creations quickly spread, and the bakery soon became a staple for residents seeking comfort in familiar flavors. Over the years, their bakery expanded. They have different branches, including one in Brgy Libertad.
+      <br><br>
+      Their branch at the back of ANECO was established in 2021, because they want to expand so that everyone in Butuan can taste how yummy it is in La Ultina.
+      <br><br>
+      La Ultina means "The Last" in Spanish, envisioned as a haven where traditional Filipino baking techniques meet heartfelt hospitality.
+    </p>
+  </section>
+
+  <section class="products">
+    <h2 class="section-title">Best-Sellers</h2>
+    <div class="product-grid">
+      {% for product in products %}
+        {% if product.is_best_seller %}
+        <div class="product-card">
+         <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+
+          <div class="product-name">{{ product.name }}</div>
+          <div class="price-cart-container">
+            <div class="price">₱{{ "%.2f"|format(product.price) }}</div>
+            <a href="{{ url_for('order') }}?product_id={{ product.id }}&quantity=1" class="cta-button" style="background-color:#f59e0b; color:white; padding:5px 10px; border-radius:4px; text-decoration:none;">Order Now</a>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="content">
+    <h2 style="text-align:center;">What Our Customers Say</h2>
+    <div style="max-width:800px; margin: 0 auto; text-align:center;">
+      <p>“Lami siya” - <strong>Myrna</strong></p>
+      <p>“Ganahan jud ko mo palit dire kay lasa kaayo ilang mga pan” - <strong>Annabel</strong></p>
+    </div>
+  </section>
+
+  <section class="content" style="text-align:center;">
+    <h2>Visit Us Today!</h2>
+    <p>Come by and try our fresh selection or contact us for more information.</p>
+    <a href="{{ url_for('contact') }}" class="cta-button" style="background-color:#f59e0b; color:rgb(0, 0, 0); padding:10px 20px; border-radius:6px; text-decoration:none;">Contact Us</a>
+  </section>
+
+  <footer style="background: linear-gradient(135deg, #1a222e, #dfcea8);  text-align:center; padding:20px; margin-top:40px;">
+    <p>&copy; 2025 Flour & Butter Bakery | Follow us on 
+      <a href="#" style="color:#ffffff;">Facebook</a> • 
+      <a href="#" style="color:#ffffff;">Instagram</a>
+    </p>
+  </footer>
+
+</body>
+</html>
